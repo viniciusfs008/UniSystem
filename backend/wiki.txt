@@ -1,0 +1,384 @@
+TB-MT Dashboard: Uma abordagem utilizando estat ´ıstica
+espac ¸o-temporal associada `a aprendizagem de m ´aquina no
+desenvolvimento de um Painel Inteligente
+Anthony M. P. Oliveira1, Vinicius S. Ferrari2, Vin ´ıcius B. Bastos3,
+Bruno S. Oliveira4, Josilene D. Alves5Andr ´e S. Abade6
+1EpiGeo Araguaia - Grupo de Pesquisa em Epidemiologia e Geoprocessamento do Araguaia
+Universidade Federal de Mato Grosso (UFMT) – Campus Araguaia
+Unidade II – Barra do Garc ¸as – MT – Brasil
+2Instituto Federal de Educac ¸ ˜ao, Ci ˆencia e Tecnologia de Mato Grosso
+Campus Barra do Garc ¸as – MT – Brasil
+anthonymuniz12@gmail.com
+Abstract. This paper outlines an Intelligent Panel project for Tuberculosis Mo-
+nitoring in Mato Grosso, utilizing data analysis and machine learning. With a
+focus on time series, the project aims to refine SINAN data and develop a pre-
+dictive model to analyze the likelihood of patient abandonment or mortality in
+Tuberculosis cases in the state. The objective is to contribute to epidemiological
+control, providing valuable insights for healthcare professionals to enhance tre-
+atment administration and improve patient outcomes. The project also aims to
+offer an accessible interface for healthcare practitioners and researchers alike.
+Resumo. Este trabalho descreve um projeto de Painel Inteligente para Monito-
+ramento da Tuberculose em Mato Grosso, utilizando an ´alise de dados e apren-
+dizado de m ´aquina. Com enfoque em s ´eries temporais, o projeto busca refinar
+dados do SINAN e desenvolver um modelo preditivo para analisar a probabili-
+dade de abandono ou ´obito de pacientes com Tuberculose no estado. O objetivo
+´e contribuir para o controle epidemiol ´ogico, fornecendo insights valiosos para
+os profissionais de sa ´ude aprimorarem a administrac ¸ ˜ao do tratamento e melho-
+rarem os resultados dos pacientes. O projeto tamb ´em visa oferecer uma inter-
+face acess ´ıvel tanto para profissionais da sa ´ude quanto para pesquisadores.
+1. Introduc ¸ ˜ao
+As novas estrat ´egias globais do setor de sa ´ude para 2022-2030, prop ˜oem uma vis ˜ao co-
+mum para acabar com as epidemias e promover a cobertura universal de sa ´ude, os cui-
+dados de sa ´ude prim ´arios e a seguranc ¸a sanit ´aria em um mundo no qual todas as pessoas
+tˆem acesso a servic ¸os de sa ´ude de qualidade e baseados em evid ˆencias. ´E preciso destacar
+a necessidade de otimizar sistemas, setores e parcerias para promover sinergias com os
+cuidados de sa ´ude prim ´arios, a governanc ¸a da sa ´ude, o financiamento, a forc ¸a de traba-
+lho, os produtos e a prestac ¸ ˜ao de servic ¸os, ao mesmo tempo que promove respostas mul-
+tissetoriais aos determinantes sociais e estruturais da sa ´ude. Adicionalmente, recolher,
+analisar e utilizar dados, com desagregac ¸ ˜ao por sexo, idade e/ou caracter ´ısticas relevantesda populac ¸ ˜ao para monitorar e avaliar o progresso para orientar as ac ¸ ˜oes, a inovac ¸ ˜ao, a
+investigac ¸ ˜ao e o desenvolvimento para promover soluc ¸ ˜oes com alto impacto nos processos
+de tomada de decis ˜ao e a formulac ¸ ˜ao de estrat ´egias de sa ´ude p ´ublica [Organization 2022].
+Neste contexto, gerar dados de alta qualidade e utilizar an ´alises de dados para im-
+pulsionar ac ¸ ˜oes, inclusive em n ´ıveis descentralizados, aplicando a ci ˆencia de dados como
+forc ¸a motriz desse processo [Pacheco et al. 2019], pode ser um diferencial determinante
+para alcanc ¸ar as metas propostas. Dados precisos, oportunos e granulares s ˜ao essenciais
+para o planejamento estrat ´egico nacional, a atribuic ¸ ˜ao de recursos, a prestac ¸ ˜ao de servic ¸os
+de sa ´ude, a defesa e a responsabilizac ¸ ˜ao. Esforc ¸os conjuntos para fortalecer os sistemas
+de informac ¸ ˜ao estrat ´egica, incluindo estimativas de carga populacional e desagregac ¸ ˜ao
+relevante de dados por sexo, idade e outras caracter ´ısticas relevantes da populac ¸ ˜ao, s ˜ao
+importantes para orientar implementac ¸ ˜ao do programa e melhoria da qualidade.
+A ciˆencia de dados emerge como uma ferramenta poderosa no combate a diver-
+sas doenc ¸as globais, incluindo a tuberculose (TB). Sua relev ˆancia para alcanc ¸ar os ob-
+jetivos da estrat ´egia END-TB 2030, que visa erradicar a TB como problema de sa ´ude
+p´ublica, ´e multifacetada e impactante. Por meio da an ´alise de grandes volumes de da-
+dos, modelagem preditiva e aprendizado de m ´aquina, a ci ˆencia de dados fornece in-
+sights cruciais que podem informar e orientar pol ´ıticas de sa ´ude p ´ublica, estrat ´egias
+de prevenc ¸ ˜ao, diagn ´ostico precoce, e tratamento eficaz da TB [Hripcsak et al. 2015,
+World Health Organization 2023].
+A TB ´e uma doenc ¸a evit ´avel e geralmente cur ´avel. No entanto, em 2022, ela
+foi a segunda principal causa de morte no mundo devido a um ´unico agente infeccioso,
+depois da doenc ¸a por coronav ´ırus (COVID-19), e causou quase o dobro de mortes que
+o HIV/SIDA. Mais de 10 milh ˜oes de pessoas continuam a adoecer com TB todos os
+anos. ´E necess ´aria uma ac ¸ ˜ao urgente para acabar com a epidemia global de TB at ´e 2030,
+um objetivo adotado por todos os Estados-Membros das Nac ¸ ˜oes Unidas (ONU) e pela
+Organizac ¸ ˜ao Mundial da Sa ´ude (OMS) [World Health Organization 2023].
+Nesta perspectiva, esta trabalho est ´a relacionado `a complexidade e `a persist ˆencia
+dos desafios enfrentados no controle da TB, principalmente quanto aos desfechos ne-
+gativos da doenc ¸a. Outro agravante que pode ser mencionado s ˜ao as limitac ¸ ˜oes dos
+profissionais e gestores de sa ´ude quanto ao uso da epidemiologia, t ´ecnicas estat ´ısticas,
+modelagens matem ´aticas e tecnologias computacionais. Al ´em disso, tem-se a crescente
+necessidade de pol ´ıticas p ´ublicas que sejam baseadas em evid ˆencias cient ´ıficas. Diante
+dessas quest ˜oes tem-se a necessidade de inovac ¸ ˜oes tecnol ´ogicas que possam ser aliadas
+ao diagn ´ostico, tratamento e monitoramento da TB.
+Diante dos desafios mencionados, ´e crucial intensificar os esforc ¸os para otimizar
+tempo, investimentos financeiros e recursos humanos no SUS. Este trabalho adota uma
+abordagem transversal, visando integrar diversas especialidades e ´areas do conhecimento
+para contribuir principalmente com a reduc ¸ ˜ao dos desfechos negativos da TB. O TB-
+MT DashBoard prop ˜oe uma abordagem inovadora e tecnol ´ogica ao incorporar t ´ecnicas
+avanc ¸adas de intelig ˆencia artificial, an ´alise de dados e modelagem matem ´atica, que po-
+dem auxiliar na previs ˜ao de desfechos negativos, refletindo na melhoria do cuidado ao
+paciente e na reduc ¸ ˜ao da morbidade e mortalidade associadas `a TB. Destaca-se que o TB-
+MT DashBoard ´e uma ferramenta abrangente, que engloba desde pacientes at ´e gestores
+p´ublicos, sendo uma iniciativa relevante para o enfrentamento da TB no Estado de MatoGrosso, com aplicabilidade direta e ben ´efica ao SUS.
+2. Trabalhos Relacionados
+Nesta sec ¸ ˜ao, as principais abordagens que utilizam ci ˆencia de dados, modelagem pre-
+ditiva e series temporais s ˜ao apresentadas. Embora poucas destes estudos utilizem es-
+sas tecnologias para predic ¸ ˜ao de s ´eries temporais em TB, ampliamos nosso escopo para
+investigac ¸ ˜oes que contribuem de alguma forma para o preenchimento dessa lacuna do
+conhecimento. Assim, foi poss ´ıvel trac ¸ar uma estrat ´egia com base nas singularidades,
+fragilidades e avanc ¸os j ´a relatados.
+A proposta de [Sulaiman and Yahaya 2013] aborda o desenvolvimento de um pai-
+nel para an ´alise de doenc ¸as cardiovasculares, com base em um esquema estelar. A pes-
+quisa teve como objetivo integrar dados m ´edicos dispersos em um ´unico armaz ´em de
+dados, identificando especificac ¸ ˜oes de design para essa finalidade. O estudo tamb ´em in-
+cluiu a implementac ¸ ˜ao do armaz ´em de dados utilizando dois tipos de bancos de dados e
+enfatizou a import ˆancia da integrac ¸ ˜ao de dados na an ´alise de informac ¸ ˜oes m ´edicas.
+A abordagem proposta por [Silva et al. 2014], apresenta um modelo preditivo com
+vari´aveis explicativas as caracter ´ısticas dos indiv ´ıduos com TB para definir o tratamento
+mais adequado. O estudo explora desde os crit ´erios de extrac ¸ ˜ao de caracter ´ısticas at ´e a
+construc ¸ ˜ao customizada de um modelo preditivo para designar o melhor tratamento.
+O estudo de [Yermalovich 2020] aborda t ´ecnicas de visualizac ¸ ˜ao para dashboards ,
+fundamentado em um entendimento avanc ¸ado dos pap ´eis na seguranc ¸a da informac ¸ ˜ao.
+Destaca-se a import ˆancia de compreender esses pap ´eis na concepc ¸ ˜ao de ferramentas de
+visualizac ¸ ˜ao, enfatizando que uma representac ¸ ˜ao visual detalhada pode acelerar a resposta
+a incidentes de seguranc ¸a. A adaptac ¸ ˜ao espec ´ıfica a cada papel permite uma representac ¸ ˜ao
+mais ergon ˆomica dos dados. O artigo continua com a an ´alise de outros aspectos relacio-
+nados `a seguranc ¸a da informac ¸ ˜ao e visualizac ¸ ˜ao de dados.
+Os estudos conduzidos por [Kenigsberg et al 2022], concentra-se no desenvolvi-
+mento de um painel para a visualizac ¸ ˜ao em tempo quase real de dados de vigil ˆancia de
+seguranc ¸a da vacina COVID-19. Esse dashboard interno foi projetado para proporcionar
+uma visualizac ¸ ˜ao facilitada e revis ˜oes r ´apidas de grandes conjuntos de dados semanais
+automatizados de seguranc ¸a de vacinas. O objetivo principal ´e apoiar a vigil ˆancia ativa
+e a pesquisa de seguranc ¸a de vacinas, utilizando An ´alise de Ciclo R ´apido para monito-
+ramento em tempo quase real das vacinas COVID-19. A ferramenta permite revis ˜oes
+r´apidas de dados, contribuindo assim para a tomada de decis ˜oes em sa ´ude p ´ublica.
+3. Materiais e M ´etodo
+Um fluxo de trabalho par ao m ´etodo proposto ´e descrito na Figura 1 e as subsec ¸ ˜oes a seguir
+apresentam cada detalhe envolvido no processo de construc ¸ ˜ao da abordagem proposta
+neste estudo.
+´E preciso destacar que todos os algoritmos desenvolvidos para a coleta, tratamento
+dos dados, modelagem preditiva e visualizac ¸ ˜ao de dados foram implementados na lingua-
+gem Python. A escolha foi motivada pela simplicidade, concis ˜ao e pela ampla gama de
+ferramentas que oferece, facilitando assim o manuseio eficiente dos dados.Figura 1. Fluxo de trabalho do m ´etodo para construc ¸ ˜ao do Painel Inteligente usando Ci ˆencia de
+Dados e Modelagem Preditiva para apoio aos processos de tomada de decis ˜ao em TB.
+3.1. Tipo de Estudo e Cen ´ario
+Este ´e um estudo explorat ´orio de s ´eries temporais, aplicando modelagem preditiva, reali-
+zado no estado de Mato Grosso, localizado na regi ˜ao Centro-Oeste do Brasil caracterizado
+pelas coordenadas aproximadas de latitude 14º a 17º sul e longitude 53º a 58º oeste. O
+Mato Grosso, especialmente em ´areas de vulnerabilidade socioecon ˆomica, pode ter taxas
+significativas dessas condic ¸ ˜oes, tornando-o um local de estudo importante.
+O estado de Mato Grosso ´e um importante corredor de migrac ¸ ˜ao e tem significa-
+tiva mobilidade populacional devido ao trabalho sazonal na agricultura e outras ind ´ustrias.
+Isso pode afetar os padr ˜oes de transmiss ˜ao e a din ˆamica da infecc ¸ ˜ao por TB. Adicional-
+mente, o Mato Grosso ´e caracterizado por uma diversidade populacional significativa,
+incluindo ´areas urbanas densas, comunidades rurais e povos ind ´ıgenas. Esta diversidade
+permite a an ´alise da TB em diferentes contextos sociais, econ ˆomicos e culturais.
+3.2. Conjunto de Dados
+A populac ¸ ˜ao do estudo consistiu em todos os casos de TB do estado de Mato Grosso
+notificados no Sistema de Informac ¸ ˜ao de Agravos de Notificac ¸ ˜ao (SINAN). Somente pes-
+soas com diagn ´ostico de TB de acordo com a Classificac ¸ ˜ao Internacional de Doenc ¸as
+(CID-10), foram inclu ´ıdos no estudo. O SINAN ´e um sistema de informac ¸ ˜ao brasi-
+leiro respons ´avel por registrar e processar informac ¸ ˜oes sobre doenc ¸as de notificac ¸ ˜ao
+obrigat ´oria em todo o pa ´ıs, mantido pelo Departamento de Inform ´atica do Sistema
+´Unico de Sa ´ude (DATASUS)[Departamento de Inform ´atica do SUS (DATASUS) 2024].
+Os dados populacionais foram extra ´ıdos do Censo Demogr ´afico 2022, dis-
+pon´ıveis no portal eletr ˆonico do Instituto Brasileiro de Geografia e Estat ´ıstica
+(IBGE)[Instituto Brasileiro de Geografia e Estat ´ıstica (IBGE) 2022].
+3.3. An ´alise dos Dados
+Antes de comec ¸ar a an ´alise de dados, foi essencial compreender as vari ´aveis dispon ´ıveis
+no SINAN para remover redund ˆancias e garantir a integridade dos dados. Devido `acomplexidade do arranjo de dados do SINAN, optou-se por extrair informac ¸ ˜oes usando
+t´ecnicas de Raspagem de Dados( Web Scraping ) com Python. Essa abordagem, definida
+por [Barbosa and Cavalcanti 2020] como a raspagem de dados diretamente da web, na
+qual informac ¸ ˜oes relevantes s ˜ao extra ´ıdas de sites por meio de bots, sendo posteriormente
+submetidas `a an´alise. Esse m ´etodo revelou-se crucial para identificar padr ˜oes e tomar
+decis ˜oes com maior precis ˜ao.
+Ap´os o pr ´e-processamento com os dados devidamente tratados, foi computada a
+taxa de incid ˆencia TB mensal de acordo com o n ´umero de casos e a populac ¸ ˜ao, estrati-
+ficada por alguns indicadores sociodemogr ´aficos, como por exemplo, sexo, faixa et ´aria,
+rac ¸a e grau de escolaridade. Para o c ´alculo da taxa de incid ˆencia da TB, utilizou-se a
+seguinte f ´ormula:
+Numero de novos casos confirmados de TB/HIV de residentes do estado de Mato Grosso
+Numero total de residentes no Estado de Mato Grosso durante o periodo×100.000Pessoas (1)
+3.4. An ´alise Espac ¸o-Temporal
+A an ´alise espac ¸o-temporal ´e uma abordagem na qual dados s ˜ao analisados considerando
+tanto a dimens ˜ao espacial quanto a dimens ˜ao temporal. Isso significa que al ´em de consi-
+derar onde os eventos ocorrem (dimens ˜ao espacial), tamb ´em leva em conta quando esses
+eventos acontecem (dimens ˜ao temporal). Essa an ´alise permite entender como os eventos
+se distribuem no espac ¸o e como essa distribuic ¸ ˜ao muda ao longo do tempo.
+Para realizar essas an ´alises, os dados foram agregados para corresponder `a gra-
+nularidade espacial almejada, com agregac ¸ ˜ao de dados de n ´ıvel de munic ´ıpio para n ´ıvel
+estadual. Adicionalmente, os dados foram normalizados para facilitar a comparac ¸ ˜ao entre
+diferentes regi ˜oes ou per ´ıodos de tempo.
+Com os dados pr ´e-processados, ´e realizada a an ´alise espacial e temporal. Para
+an´alise espacial, utiliza-se a biblioteca geopandas para manipular dados geoespaci-
+ais, incluindo arquivos shapefile que cont ˆem informac ¸ ˜oes sobre os limites geogr ´aficos
+das regi ˜oes de interesse. An ´alises espaciais s ˜ao realizadas para identificar padr ˜oes e
+tendˆencias na distribuic ¸ ˜ao da incid ˆencia da tuberculose ao longo do tempo e do espac ¸o.
+Isso pode incluir c ´alculos de densidade, an ´alise de clusters espaciais e outros m ´etodos.
+Com os resultados da an ´alise em m ˜aos, passa-se para a etapa de visualizac ¸ ˜ao de
+dados. Utilizando bibliotecas de visualizac ¸ ˜ao como matplotlib, seaborn, folium e plo-
+tly, s ˜ao criados mapas e gr ´aficos que representam os resultados das an ´alises espaciais e
+temporais. Mapas de calor, mapas de coropl ´eticos ou mapas de pontos s ˜ao criados para
+visualizar a distribuic ¸ ˜ao espacial da taxa de incid ˆencia da tuberculose, enquanto gr ´aficos
+de linha, gr ´aficos de barras ou gr ´aficos de caixa s ˜ao utilizados para visualizar variac ¸ ˜oes
+temporais na incid ˆencia.
+3.5. S ´erie Temporal
+A an ´alise de s ´eries temporais ´e uma ferramenta essencial em estudos epidemiol ´ogicos,
+permitindo a organizac ¸ ˜ao e an ´alise de informac ¸ ˜oes quantitativas ao longo do tempo. No
+contexto da TB, a an ´alise de s ´eries temporais pode ser aplicada para identificar padr ˜oesde incid ˆencia da doenc ¸a, avaliar tend ˆencias ao longo do tempo e prever cen ´arios futuros
+com base em dados hist ´oricos [Antunes and Cardoso 2015].
+A aplicac ¸ ˜ao da an ´alise de s ´eries temporais em estudos epidemiol ´ogicos de acordo
+com [Antunes and Cardoso 2015] assume uma import ˆancia fundamental ao facultar a
+antecipac ¸ ˜ao de cen ´arios futuros na distribuic ¸ ˜ao de doenc ¸as dentro da populac ¸ ˜ao. Adi-
+cionalmente, viabiliza a identificac ¸ ˜ao de fatores capazes de modificar essa distribuic ¸ ˜ao,
+seja para melhor ou para pior. Essa abordagem proporciona uma compreens ˜ao aprofun-
+dada da din ˆamica das medidas de interesse em sa ´ude, capacita a previs ˜ao de resultados e
+promove a identificac ¸ ˜ao criteriosa dos fatores que exercem influ ˆencia sobre os mesmos.
+3.6. Modelagem Preditiva
+A modelagem preditiva de s ´eries temporais ´e ramo da estat ´ıstica e da an ´alise de
+dados que se concentra em usar informac ¸ ˜oes hist ´oricas para prever eventos ou
+tendˆencias futuras[Brockwell and Davis 2002]. Em nosso estudo exploramos abor-
+dagens desde a estat ´ıstica cl ´assica at ´e o aprendizado de m ´aquina, utilizando uma
+gama diversificada de m ´etodos anal ´ıticos, como, por exemplo, suavizac ¸ ˜ao expo-
+nencial ( Simple Exponential Smoothing [Brown 1963], Double Exponential Smo-
+othing [Holt 1957], Triple Exponential Smoothing (Holt-Winters)[Chatfield 1978]),
+modelos autorregressivos (ARIMA)[Box and Pierce 1970] e modelos baseados em
+aprendizado de m ´aquina ( Support Vector Regression (SVR)[Cortes and Vapnik 1995],
+Extreme Gradient Boosting (XGBoost)[Chen and Guestrin 2016], Long Short-
+Term Memory (LSTM)[Hochreiter and Schmidhuber 1997], Gated Recurrent Unit
+(GRU)[Cho et al. 2014], Convolutional Neural Network (CNN)[LeCun et al. 1998]),
+para fazer previs ˜oes de coinfecc ¸ ˜ao de TB/HIV e aumentar a robustez dos resultados.
+Se v ´arios m ´etodos independentes apontam para a mesma tend ˆencia ou previs ˜ao, h ´a
+implicitamente um aumento na confiabilidade dos resultados alcanc ¸ados.
+Na implementac ¸ ˜ao dos modelos, utilizamos a estrat ´egia de otimizac ¸ ˜ao de
+parˆametros aplicando a t ´ecnica de Grid Search [Belete and Huchaiah 2022], intuindo me-
+lhorar o desempenho ponderando o espac ¸o de par ˆametros e a complexidade de cada mo-
+delo utilizado. Inicialmente, implementamos uma busca com um grid mais amplo e gros-
+seiro, seguida de buscas mais refinadas em ´areas promissoras do espac ¸o de par ˆametros
+para cada modelo.
+3.7. Descric ¸ ˜ao do sistema de software e hardware
+Os experimentos foram implementados em uma m ´aquina Linux, com Ubuntu 22.04, pro-
+cessador AMD Ryzen™ 9 7950X3D, 2 GPU NVIDIA® Quadro RTX A5500 de 24GB,
+128GB de RAM DDR5. Todos os modelos foram desenvolvidos utilizando as bibliotecas
+StatModels 0.14.1, TensorFlow 2.15, Scikit-Learn 0.20. Python 3.10.12 com as bibliote-
+cas folium 0.16.0, geopandas 0.14.3 selenium 4.18.1 foram usados para implementac ¸ ˜ao
+de algoritmos e normalizac ¸ ˜ao de dados.
+4. Resultados e Discuss ˜ao
+Nesta sec ¸ ˜ao ser ˜ao apresentados os resultados alcanc ¸ados nas seguintes etapas de desen-
+volvimento do projeto: Extrac ¸ ˜ao e Limpeza de Dados, An ´alise Explorat ´oria, ModelagemPreditiva e a Preparac ¸ ˜ao de Visualizac ¸ ˜ao.
+Na Tabela 1 s ˜ao apresentados os resultados alcanc ¸ados com extrac ¸ ˜ao, limpeza e
+normalizac ¸ ˜ao dos dados j ´a aplicados agrupamentos sociodemogr ´aficos. ´E preciso desta-
+car que n ˜ao houve recorte de per ´ıodo de tempo nos resultados, sendo que os resultados
+correspondem ao per ´ıodo de 1999 `a 2024.
+Tabela 1. Dados Sociodemogr ´aficos - Extrac ¸ ˜ao e An ´alise Explorat ´oria dos Dados (1999-2024)
+Idade
+Variáveis Numero de Casos %
+01 a 04 anos 657 1.75
+05 a 09 anos 486 1.29
+10 a 14 anos 620 1.65
+15 a 19 anos 1699 4.52
+20 a 24 anos 3574 9.5
+25 a 29 anos 3866 10.28
+30 a 34 anos 3896 10.36
+35 a 39 anos 3630 9.65
+40 a 44 anos 3361 8.94
+45 a 49 anos 3280 8.72
+50 a 54 anos 2971 7.9
+55 a 59 anos 2549 6.78
+60 a 64 anos 2085 5.54
+65 e + 4557 12.12
+Menor 01 ano 382 1.02
+Total 37613 100.0
+Raça dos Paciente
+Variáveis Numero de Casos %
+Amarela 360 0.96
+Branca 8160 21.69
+Indígena 2233 5.94
+Parda 17741 47.17
+Preta 4319 11.48
+Ignorados/Em Branco 4800 12.76
+Total 37613 100.0
+Sexo
+Variáveis Numero de Casos %
+Feminino 12527 33.3
+Masculino 25080 66.68
+Ignorado/Em Branco 6.0 0.02
+Total 37613 100.0Forma Clinica
+Variáveis Numero de Casos %
+Extrapulmonar 3517 9.35
+Pulmonar 33070 87.92
+Pulmonar + Extrapulmonar 762 2.03
+Ignorado 264 0.7
+Total 37613 100.0
+Escolaridade
+Variáveis Numero de Casos %
+1ª a 4ª série incompleta do EF 5790 15.39
+4ª série completa do EF 1990 5.29
+5ª a 8ª série incompleta do EF 6688 17.78
+Sem Escolaridade 2929 7.79
+Educação superior completa 1506 4.0
+Educação superior incompleta 520 1.38
+Ensino fundamental completo 2061 5.48
+Ensino médio completo 3281 8.72
+Ensino médio incompleto 3270 8.69
+Não se aplica 1121 2.98
+Ignorado/Em Branco 8457 22.48
+Total 37613 100.0
+Agravos Associados a AIDS
+Variáveis Numero de Casos %
+Não 20656.0 54.92
+Sim 2575 6.85
+Ignorado/Em Branco 14382 38.24
+Total 37613 100.0
+Na Figura 2A ´e apresentado o mapa construindo por meio da estat ´ıstica de Moran
+que testa a autocorrelac ¸ ˜ao local e detecta objetos espaciais com influ ˆencia no indicador
+Moran Global. J ´a na Figura 2B ´e apresentado o mapa de calor ( hotspot ) destacando as
+´areas com maior incid ˆencia de TB no per ´ıodo avaliado. A Figura 2C representa um mapa
+com a taxa de incid ˆencia no estado. Por fim, a Figura 2D apresenta um mapa de clusters
+por n ´umero de casos notificados no estado.
+Os resultados analisam s ´eries temporais de notificac ¸ ˜oes de TB com coinfecc ¸ ˜ao
+HIV fazem um recorte temporal de 2012 a 2023. Na Figura 3, as s ´eries temporais da taxa
+de incid ˆencia mensal s ˜ao mostradas, estratificadas por sexo e populac ¸ ˜ao geral. A taxa
+de incid ˆencia da populac ¸ ˜ao total oscila ao longo do tempo, sem uma tend ˆencia clara de
+aumento ou diminuic ¸ ˜ao. A taxa de incid ˆencia masculina parece ter uma leve tend ˆencia
+de aumento, com um pico por volta de 2022, enquanto a taxa de incid ˆencia feminina
+permanece est ´avel.
+Cada modelo foi avaliado usando uma divis ˜ao de dados em conjuntos de trei-
+namento e validac ¸ ˜ao, com cerca de 80% das observac ¸ ˜oes para treinamento e 20%
+para validac ¸ ˜ao. O conjunto de validac ¸ ˜ao consistiu em 24 observac ¸ ˜oes finais para cada
+estratificac ¸ ˜ao por sexo e populac ¸ ˜ao total, garantindo um intervalo homog ˆeneo entre as
+s´eries para facilitar comparac ¸ ˜oes e an ´alises. O desempenho de cada modelo conforme aFigura 2. An ´alise espac ¸o-temporal: A - Estat´ ıstica de Moran; B - Mapa de Calor por n ´ umero de casos;
+C - Mapa da taxa de incid ˆencia de TB; D - Mapa de clusters por n ´ umero de casos
+Figura 3. TB: Hist ´orico da taxa de incid ˆencia de TB com HIV no estado de Mato Grosso - (2012 a 2023)
+estrat ´egia de treinamento pode ser visto na Figura 4A.
+5. Conclus ˜ao
+Em conclus ˜ao, os resultados ainda que parciais deste trabalho, demonstraram que a abor-
+dagem proposta ´e exitosa quanto a produc ¸ ˜ao de conhecimento que podem ser utilizados
+para apoio ao processo de tomada de decis ˜ao no combate a TB. Os resultados enfatizam a
+import ˆancia da utilizac ¸ ˜ao de abordagens de modelagem avanc ¸adas na sa ´ude p ´ublica para
+aprimorar as estrat ´egias de prevenc ¸ ˜ao e controle de doenc ¸as infecciosas, como a TB, con-
+tribuindo assim para esforc ¸os mais efetivos na reduc ¸ ˜ao da incid ˆencia dessas condic ¸ ˜oes.
+Refer ˆencias
+[Antunes and Cardoso 2015] Antunes, J. L. F. and Cardoso, M. R. A. (2015). Uso da an ´alise
+de s´eries temporais em estudos epidemiol ´ogicos. Epidemiol. Serv. Sa ´ude, 24(3).Figura 4. Visualizac ¸ ˜ao do treinamento dos modelos em s ´eries temporais. A - Feminino, B - Masculino
+e C - Populac ¸ ˜ao Total.
+[Barbosa and Cavalcanti 2020] Barbosa, A. B. G. and Cavalcanti, A. B. (2020). Web
+scraping e an ´alise de dados. https://www.editorarealize.com.
+br/editora/anais/conapesc/2020/TRABALHO_EV138_MD4_SA24_
+ID1284_24112020001516.pdf . Acesso em: 29 fev. 2024.
+[Belete and Huchaiah 2022] Belete, D. M. and Huchaiah, M. D. (2022). Grid search in
+hyperparameter optimization of machine learning models for prediction of hiv/aids test
+results. International Journal of Computers and Applications , 44(9):875–886.
+[Box and Pierce 1970] Box, G. E. and Pierce, D. A. (1970). Distribution of residual auto-
+correlations in autoregressive-integrated moving average time series models. Journal
+of the American statistical Association , 65(332):1509–1526.
+[Brockwell and Davis 2002] Brockwell, P. J. and Davis, R. A. (2002). Introduction to Time
+Series and Forecasting . Springer.
+[Brown 1963] Brown, R. G. (1963). Smoothing, Forecasting and Prediction of Discrete
+Time Series . Prentice-Hall.
+[Chatfield 1978] Chatfield, C. (1978). The holt-winters forecasting procedure. Journal of
+the Royal Statistical Society: Series C (Applied Statistics) , 27(3):264–279.
+[Chen and Guestrin 2016] Chen, T. and Guestrin, C. (2016). Xgboost: A scalable tree bo-
+osting system. In Proceedings of the 22nd ACM SIGKDD International Conference on
+Knowledge Discovery and Data Mining , pages 785–794. ACM.
+[Cho et al. 2014] Cho et al., K. (2014). Learning phrase representations using rnn encoder-
+decoder for statistical machine translation. In Proceedings of the 2014 Conference on
+(EMNLP) , pages 1724–1734. Association for Computational Linguistics.
+[Cortes and Vapnik 1995] Cortes, C. and Vapnik, V . (1995). Support-vector networks. Ma-
+chine Learning , 20(3):273–297.[Departamento de Inform ´atica do SUS (DATASUS) 2024] Departamento de Inform ´atica do
+SUS (DATASUS) (2024). Sistema de informac ¸ ˜ao de agravos de notificac ¸ ˜ao (sinan).
+DataSUS - Minist ´erio da Sa ´ude.
+[Hochreiter and Schmidhuber 1997] Hochreiter, S. and Schmidhuber, J. (1997). Long short-
+term memory. Neural Computation , 9(8):1735–1780.
+[Holt 1957] Holt, C. C. (1957). Forecasting trends and seasonal by exponentially weighted
+averages. ONR Research Memorandum, Carnegie Institute of Technology .
+[Hripcsak et al. 2015] Hripcsak et al., G. (2015). Observational health data sciences and
+informatics (ohdsi): opportunities for observational researchers. Studies in health te-
+chnology and informatics , 216:574.
+[Instituto Brasileiro de Geografia e Estat ´ıstica (IBGE) 2022] Instituto Brasileiro de Geogra-
+fia e Estat ´ıstica (IBGE) (2022). Censo demogr ´afico 2022. Instituto Brasileiro de Geo-
+grafia e Estat ´ıstica.
+[Kenigsberg et al 2022] Kenigsberg et al, T. A. (2022). Dashboard development for near
+real-time visualization of covid-19 vaccine safety surveillance data in the vaccine
+safety datalink. https://doi.org/10.1016/j.vaccine.2022.04.010 .
+Acessado em: 28 fev. 2024.
+[LeCun et al. 1998] LeCun, Y ., Bottou, L., Bengio, Y ., and Haffner, P. (1998). Gradient-
+based learning applied to document recognition. Proceedings of the IEEE ,
+86(11):2278–2324.
+[Organization 2022] Organization, W. H. (2022). Global health sector strate-
+gies on hiv, viral hepatitis and sexually transmitted infections for the pe-
+riod 2022–2030. https://iris.who.int/bitstream/handle/10665/360348/9789240053779-
+eng.pdf?sequence=1.
+[Pacheco et al. 2019] Pacheco, M., Brister, B., Disconzi, S., and Salton, M. (2019). Ci ˆencia
+de dados: Enfoque no desafio do processamento. https://www.redalyc.org/
+articulo.oa?id=560662202012 . Acesso em: 29 fev. 2024.
+[Silva et al. 2014] Silva, R. F. et al. (2014). Modelo preditivo ao abandono do tratamento da
+tuberculose. Sa´ude em Debate .
+[Sulaiman and Yahaya 2013] Sulaiman, N. S. and Yahaya, J. H. (2013). Development of
+dashboard visualization for cardiovascular disease based on star scheme. Procedia
+Technology , 11.
+[World Health Organization 2023] World Health Organization (2023). Global tuberculo-
+sis report 2023. https://iris.who.int/bitstream/handle/10665/373828/9789240083851-
+eng.pdf?sequence=1.
+[Yermalovich 2020] Yermalovich, P. (2020). Dashboard visualization techniques in infor-
+mation security. In Proceedings of the IEEE . IEEE.
